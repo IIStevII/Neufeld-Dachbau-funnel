@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jetzt bewerben – Neufeld Dachbau</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        .hero-bg {
+            background: #0d0d0d;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0; right: 0;
+            height: 60px;
+            background: #f9fafb;
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.6rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+            background: white;
+            color: #111;
+        }
+        .form-input:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
+        }
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.8rem center;
+            background-repeat: no-repeat;
+            background-size: 1.4em 1.4em;
+            padding-right: 2.5rem;
+        }
+
+        .radio-card {
+            position: relative;
+        }
+        .radio-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0; height: 0;
+        }
+        .radio-card label {
+            display: block;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .radio-card label:hover {
+            border-color: #fca5a5;
+        }
+        .radio-card input[type="radio"]:checked + label {
+            border-color: #dc2626;
+            background: #fff1f1;
+            color: #dc2626;
+        }
+
+        .btn-red {
+            background: #dc2626;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 800;
+            font-size: 1.1rem;
+            width: 100%;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.15s, transform 0.1s;
+        }
+        .btn-red:hover { background: #b91c1c; }
+        .btn-red:active { transform: scale(0.99); }
+        .btn-red:disabled { background: #9ca3af; cursor: not-allowed; }
+
+        .benefit-card {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #f3f4f6;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.5s ease both; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ── HEADER ─────────────────────────────────── -->
+<header class="bg-black py-3 px-5 sticky top-0 z-50 shadow-xl">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-1">
+            <span class="text-white font-black text-xl tracking-tight">NEUFELD</span>
+            <span class="text-red-500 font-black text-xl tracking-tight ml-1">DACHBAU</span>
+        </div>
+        <a href="#bewerben"
+           class="bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition">
+            Jetzt bewerben
+        </a>
+    </div>
+</header>
+
+<!-- ── HERO ───────────────────────────────────── -->
+<section class="hero-bg text-white py-24 px-5 pb-32">
+    <div class="max-w-3xl mx-auto text-center relative z-10 fade-in">
+        <div class="inline-flex items-center gap-2 bg-red-600/20 border border-red-600/40
+                    text-red-400 text-sm font-semibold px-4 py-1.5 rounded-full mb-7">
+            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+            Wir suchen Verstärkung – Stellen offen!
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl font-black leading-tight mb-6">
+            Werde Teil des<br>
+            <span class="text-red-500">Neufeld Dachbau</span><br>
+            Teams!
+        </h1>
+
+        <p class="text-gray-300 text-lg sm:text-xl max-w-xl mx-auto mb-10">
+            Wir suchen <strong class="text-white">Dachdecker (m/w/d)</strong> für unser wachsendes Team —
+            faire Bezahlung, starkes Team, sichere Zukunft.
+        </p>
+
+        <a href="#bewerben"
+           class="inline-block bg-red-600 hover:bg-red-700 text-white font-black text-lg
+                  px-10 py-4 rounded-2xl transition transform hover:scale-105 shadow-lg shadow-red-900/40">
+            Kostenlos bewerben &rarr;
+        </a>
+        <p class="text-gray-600 text-sm mt-4">⏱ Nur 2 Minuten — direkt auf dem Handy</p>
+    </div>
+</section>
+
+<!-- ── WARUM WIR ───────────────────────────────── -->
+<section class="py-16 px-5 bg-gray-50">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-black text-gray-900 text-center mb-2">Warum Neufeld Dachbau?</h2>
+        <p class="text-gray-400 text-center mb-12">Das erwartet dich bei uns</p>
+
+        <div class="grid sm:grid-cols-2 gap-5">
+            <div class="benefit-card">
+                <div class="text-3xl flex-shrink-0">💰</div>
+                <div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-1">Faire Bezahlung</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Überdurchschnittliches Gehalt je nach Erfahrung — pünktlich und verlässlich.
+                    </p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="text-3xl flex-shrink-0">🤝</div>
+                <div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-1">Familiäres Team</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Kein Stress, kein Druck von oben — wir halten zusammen und helfen uns gegenseitig.
+                    </p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="text-3xl flex-shrink-0">🛠️</div>
+                <div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-1">Modernes Equipment</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Hochwertige Werkzeuge, neueste Fahrzeuge und professionelle Ausrüstung.
+                    </p>
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="text-3xl flex-shrink-0">📋</div>
+                <div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-1">Unbefristeter Vertrag</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Sicherer Arbeitsplatz mit echter Perspektive — keine Zeitarbeit, kein Stress.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── BEWERBUNGSFORMULAR ─────────────────────── -->
+<section id="bewerben" class="py-16 px-5 bg-white">
+    <div class="max-w-xl mx-auto">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black text-gray-900 mb-2">Jetzt bewerben</h2>
+            <p class="text-gray-400">Füll das Formular aus — wir melden uns innerhalb von 24h</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+
+            <form id="bewerbungsFormular">
+
+                <!-- Name -->
+                <div class="grid grid-cols-2 gap-3 mb-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Vorname *</label>
+                        <input type="text" name="vorname" required placeholder="Max" class="form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nachname *</label>
+                        <input type="text" name="nachname" required placeholder="Mustermann" class="form-input">
+                    </div>
+                </div>
+
+                <!-- E-Mail -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">E-Mail-Adresse *</label>
+                    <input type="email" name="email" required placeholder="max@beispiel.de" class="form-input">
+                </div>
+
+                <!-- Telefon -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Telefonnummer *</label>
+                    <input type="tel" name="telefon" required placeholder="+49 151 234 56789" class="form-input">
+                </div>
+
+                <!-- Deutschkenntnisse -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Deutschkenntnisse *</label>
+                    <select name="deutschkenntnisse" required class="form-input form-select">
+                        <option value="">Bitte wählen...</option>
+                        <option value="Grundkenntnisse (A1-A2)">Grundkenntnisse (A1–A2)</option>
+                        <option value="Gut (B1-B2)">Gut (B1–B2)</option>
+                        <option value="Fließend (C1)">Fließend (C1)</option>
+                        <option value="Muttersprache / Sehr gut (C2)">Muttersprache / Sehr gut (C2)</option>
+                    </select>
+                </div>
+
+                <!-- Erfahrung -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                        Erfahrung als Dachdecker *
+                    </label>
+                    <select name="erfahrung" required class="form-input form-select">
+                        <option value="">Bitte wählen...</option>
+                        <option value="Keine / Quereinsteiger">Keine / Quereinsteiger</option>
+                        <option value="1–2 Jahre">1–2 Jahre</option>
+                        <option value="3–5 Jahre">3–5 Jahre</option>
+                        <option value="Mehr als 5 Jahre">Mehr als 5 Jahre</option>
+                    </select>
+                </div>
+
+                <!-- Eintrittstermin -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                        Frühester Eintrittstermin *
+                    </label>
+                    <input type="date" name="eintrittstermin" required class="form-input">
+                </div>
+
+                <!-- Führerschein -->
+                <div class="mb-5">
+                    <p class="text-sm font-semibold text-gray-700 mb-3">Führerschein vorhanden? *</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="radio-card">
+                            <input type="radio" name="fuehrerschein" id="fs_ja" value="ja" required>
+                            <label for="fs_ja">✅ Ja</label>
+                        </div>
+                        <div class="radio-card">
+                            <input type="radio" name="fuehrerschein" id="fs_nein" value="nein">
+                            <label for="fs_nein">❌ Nein</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Eigenes Fahrzeug -->
+                <div class="mb-6">
+                    <p class="text-sm font-semibold text-gray-700 mb-3">Eigenes Fahrzeug? *</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="radio-card">
+                            <input type="radio" name="eigenes_fahrzeug" id="fz_ja" value="ja" required>
+                            <label for="fz_ja">🚗 Ja</label>
+                        </div>
+                        <div class="radio-card">
+                            <input type="radio" name="eigenes_fahrzeug" id="fz_nein" value="nein">
+                            <label for="fz_nein">❌ Nein</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nachricht -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                        Kurze Nachricht
+                        <span class="font-normal text-gray-400">(optional)</span>
+                    </label>
+                    <textarea name="nachricht" rows="3" class="form-input resize-none"
+                        placeholder="Erzähl uns kurz etwas über dich oder deine Erfahrungen..."></textarea>
+                </div>
+
+                <!-- Fehlermeldung -->
+                <div id="errorMsg"
+                     class="hidden mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
+                    Es ist ein Fehler aufgetreten. Bitte versuche es erneut.
+                </div>
+
+                <!-- Absenden -->
+                <button type="submit" id="submitBtn" class="btn-red">
+                    Bewerbung absenden &rarr;
+                </button>
+
+                <p class="text-xs text-gray-400 text-center mt-4">
+                    🔒 Deine Daten werden vertraulich behandelt und nicht weitergegeben.
+                </p>
+            </form>
+
+            <!-- Erfolg -->
+            <div id="successMsg" class="hidden text-center py-10 fade-in">
+                <div class="text-6xl mb-5">🎉</div>
+                <h3 class="text-2xl font-black text-gray-900 mb-3">Bewerbung eingegangen!</h3>
+                <p class="text-gray-500 leading-relaxed">
+                    Vielen Dank für deine Bewerbung!<br>
+                    Wir melden uns <strong>innerhalb von 24 Stunden</strong> bei dir.
+                </p>
+                <div class="mt-8 p-4 bg-gray-50 rounded-xl text-sm text-gray-500">
+                    In der Zwischenzeit: Folge uns auf Instagram für News und Einblicke ins Team!
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────── -->
+<footer class="bg-black py-8 px-5 text-center">
+    <p class="font-black text-white text-lg mb-1">
+        NEUFELD <span class="text-red-500">DACHBAU</span>
+    </p>
+    <p class="text-gray-600 text-sm">© 2026 Neufeld Dachbau · Alle Rechte vorbehalten</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════════════
+//  SUPABASE ZUGANGSDATEN — HIER ANPASSEN
+// ════════════════════════════════════════════════════
+const SUPABASE_URL      = 'https://jykuvqucvzawuvmfzxzz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5a3V2cXVjdnphd3V2bWZ6eHp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTQ5ODcsImV4cCI6MjA5NTM5MDk4N30.X7DVe2uCCPkJ6NSpvVDetbqyJzCsiY1ELooFCdWTht4';
+// ════════════════════════════════════════════════════
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+document.getElementById('bewerbungsFormular').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const btn      = document.getElementById('submitBtn');
+    const errorDiv = document.getElementById('errorMsg');
+
+    btn.disabled    = true;
+    btn.textContent = 'Wird gesendet…';
+    errorDiv.classList.add('hidden');
+
+    const form = e.target;
+
+    const fuehrerscheinVal   = form.querySelector('input[name="fuehrerschein"]:checked');
+    const eigenesfahrzeugVal = form.querySelector('input[name="eigenes_fahrzeug"]:checked');
+
+    if (!fuehrerscheinVal || !eigenesfahrzeugVal) {
+        errorDiv.textContent = 'Bitte alle Pflichtfelder ausfüllen.';
+        errorDiv.classList.remove('hidden');
+        btn.disabled    = false;
+        btn.textContent = 'Bewerbung absenden →';
+        return;
+    }
+
+    const data = {
+        vorname:          form.vorname.value.trim(),
+        nachname:         form.nachname.value.trim(),
+        email:            form.email.value.trim().toLowerCase(),
+        telefon:          form.telefon.value.trim(),
+        deutschkenntnisse: form.deutschkenntnisse.value,
+        erfahrung:        form.erfahrung.value,
+        eintrittstermin:  form.eintrittstermin.value,
+        fuehrerschein:    fuehrerscheinVal.value === 'ja',
+        eigenes_fahrzeug: eigenesfahrzeugVal.value === 'ja',
+        nachricht:        form.nachricht.value.trim() || null,
+    };
+
+    const { error } = await db.from('bewerbungen').insert([data]);
+
+    if (error) {
+        console.error(error);
+        errorDiv.textContent = 'Fehler beim Senden. Bitte versuche es erneut.';
+        errorDiv.classList.remove('hidden');
+        btn.disabled    = false;
+        btn.textContent = 'Bewerbung absenden →';
+    } else {
+        form.classList.add('hidden');
+        document.getElementById('successMsg').classList.remove('hidden');
+        document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+</script>
+</body>
+</html>

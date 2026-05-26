@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin – Neufeld Dachbau Bewerbungen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f3f4f6; }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.6rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .form-input:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+        .status-neu         { background: #dbeafe; color: #1d4ed8; }
+        .status-in_pruefung { background: #fef9c3; color: #854d0e; }
+        .status-eingeladen  { background: #dcfce7; color: #166534; }
+        .status-abgelehnt   { background: #fee2e2; color: #991b1b; }
+
+        .status-select {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.35rem 0.6rem;
+            border-radius: 0.4rem;
+            border: 1.5px solid #e5e7eb;
+            cursor: pointer;
+            outline: none;
+            background: white;
+        }
+        .status-select:focus { border-color: #dc2626; }
+
+        tr:hover td { background: #fafafa; }
+
+        .btn-red {
+            background: #dc2626;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.6rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.15s;
+        }
+        .btn-red:hover { background: #b91c1c; }
+
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid #f3f4f6;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.3s ease both; }
+
+        #loginSection  { display: flex; }
+        #adminSection  { display: none; }
+    </style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────── -->
+<header class="bg-black py-3 px-6 shadow-xl">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-1">
+            <span class="text-white font-black text-lg tracking-tight">NEUFELD</span>
+            <span class="text-red-500 font-black text-lg tracking-tight ml-1">DACHBAU</span>
+            <span class="text-gray-500 font-medium ml-3 text-sm">/ Admin</span>
+        </div>
+        <button id="logoutBtn"
+                class="hidden text-gray-400 hover:text-white text-sm font-medium transition">
+            Abmelden
+        </button>
+    </div>
+</header>
+
+<!-- ── LOGIN ──────────────────────────────────── -->
+<section id="loginSection"
+         class="min-h-screen items-center justify-center p-6">
+    <div class="w-full max-w-sm fade-in">
+        <div class="text-center mb-8">
+            <div class="text-4xl mb-3">🔒</div>
+            <h1 class="text-2xl font-black text-gray-900">Admin-Login</h1>
+            <p class="text-gray-400 text-sm mt-1">Neufeld Dachbau · Bewerbungsverwaltung</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <form id="loginForm">
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">E-Mail</label>
+                    <input type="email" id="loginEmail" required
+                           placeholder="admin@neufeld-dachbau.de"
+                           class="form-input">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Passwort</label>
+                    <input type="password" id="loginPassword" required
+                           placeholder="••••••••"
+                           class="form-input">
+                </div>
+
+                <div id="loginError"
+                     class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-xl
+                            text-red-700 text-sm font-medium">
+                    Falsche E-Mail oder Passwort.
+                </div>
+
+                <button type="submit" id="loginBtn" class="btn-red w-full">
+                    Einloggen
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- ── ADMIN BEREICH ──────────────────────────── -->
+<section id="adminSection" class="min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Statistiken -->
+        <div id="statsRow" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8"></div>
+
+        <!-- Filter & Suche -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-6
+                    flex flex-col sm:flex-row gap-3">
+            <input type="text" id="searchInput" placeholder="🔍 Suche nach Name, E-Mail, Telefon..."
+                   class="form-input flex-1">
+            <select id="filterStatus" class="form-input sm:w-48">
+                <option value="">Alle Status</option>
+                <option value="neu">Neu</option>
+                <option value="in_pruefung">In Prüfung</option>
+                <option value="eingeladen">Eingeladen</option>
+                <option value="abgelehnt">Abgelehnt</option>
+            </select>
+        </div>
+
+        <!-- Tabelle Desktop -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hidden sm:block">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h2 class="font-bold text-gray-900 text-lg">Bewerbungen</h2>
+                <span id="countBadge" class="text-sm text-gray-400 font-medium"></span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-100">
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Datum</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Name</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Kontakt</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Deutsch</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Erfahrung</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Eintritt</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">FS / Auto</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Status</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="9" class="text-center py-12 text-gray-400">
+                                Lade Bewerbungen…
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Karten Mobile -->
+        <div id="mobileCards" class="sm:hidden space-y-4"></div>
+
+    </div>
+</section>
+
+<!-- ── DETAIL MODAL ───────────────────────────── -->
+<div id="detailModal"
+     class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50
+            flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto fade-in">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <h3 class="font-black text-gray-900 text-lg">Bewerbungsdetails</h3>
+            <button id="closeModal"
+                    class="text-gray-400 hover:text-gray-700 text-2xl font-light leading-none">
+                &times;
+            </button>
+        </div>
+        <div id="modalContent" class="p-6 space-y-4"></div>
+    </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+//  SUPABASE ZUGANGSDATEN — HIER ANPASSEN
+// ════════════════════════════════════════════════════
+const SUPABASE_URL      = 'https://jykuvqucvzawuvmfzxzz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5a3V2cXVjdnphd3V2bWZ6eHp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTQ5ODcsImV4cCI6MjA5NTM5MDk4N30.X7DVe2uCCPkJ6NSpvVDetbqyJzCsiY1ELooFCdWTht4';
+// ════════════════════════════════════════════════════
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let allBewerbungen = [];
+
+// ── HILFSFUNKTIONEN ───────────────────────────────
+function fmtDatum(iso) {
+    if (!iso) return '–';
+    return new Date(iso).toLocaleDateString('de-DE', {
+        day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+}
+function fmtEintritt(iso) {
+    if (!iso) return '–';
+    const [y, m, d] = iso.split('-');
+    return `${d}.${m}.${y}`;
+}
+function statusBadge(status) {
+    const map = {
+        neu:         ['Neu',         'status-neu'],
+        in_pruefung: ['In Prüfung',  'status-in_pruefung'],
+        eingeladen:  ['Eingeladen',  'status-eingeladen'],
+        abgelehnt:   ['Abgelehnt',   'status-abgelehnt'],
+    };
+    const [label, cls] = map[status] || ['Unbekannt', 'status-neu'];
+    return `<span class="status-badge ${cls}">${label}</span>`;
+}
+function jaNein(bool) {
+    return bool ? '✅ Ja' : '❌ Nein';
+}
+function statusSelectHtml(id, current) {
+    const opts = [
+        ['neu',         'Neu'],
+        ['in_pruefung', 'In Prüfung'],
+        ['eingeladen',  'Eingeladen'],
+        ['abgelehnt',   'Abgelehnt'],
+    ].map(([val, label]) =>
+        `<option value="${val}" ${val === current ? 'selected' : ''}>${label}</option>`
+    ).join('');
+    return `<select class="status-select" data-id="${id}" onchange="updateStatus(this)">${opts}</select>`;
+}
+
+// ── STATISTIKEN ───────────────────────────────────
+function renderStats(data) {
+    const counts = { neu: 0, in_pruefung: 0, eingeladen: 0, abgelehnt: 0 };
+    data.forEach(b => { if (counts[b.status] !== undefined) counts[b.status]++; });
+
+    const stats = [
+        { label: 'Gesamt',      value: data.length,           color: 'text-gray-900' },
+        { label: 'Neu',         value: counts.neu,            color: 'text-blue-600'  },
+        { label: 'Eingeladen',  value: counts.eingeladen,     color: 'text-green-600' },
+        { label: 'Abgelehnt',   value: counts.abgelehnt,      color: 'text-red-600'   },
+    ];
+
+    document.getElementById('statsRow').innerHTML = stats.map(s => `
+        <div class="stat-card">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${s.label}</p>
+            <p class="text-3xl font-black ${s.color}">${s.value}</p>
+        </div>
+    `).join('');
+}
+
+// ── TABELLE RENDERN ───────────────────────────────
+function renderTable(data) {
+    document.getElementById('countBadge').textContent = `${data.length} Bewerbung${data.length !== 1 ? 'en' : ''}`;
+
+    if (data.length === 0) {
+        document.getElementById('tableBody').innerHTML = `
+            <tr><td colspan="9" class="text-center py-12 text-gray-400">Keine Einträge gefunden.</td></tr>`;
+        document.getElementById('mobileCards').innerHTML = `
+            <div class="text-center py-8 text-gray-400">Keine Einträge gefunden.</div>`;
+        return;
+    }
+
+    // Desktop Tabelle
+    document.getElementById('tableBody').innerHTML = data.map(b => `
+        <tr class="border-b border-gray-50 transition">
+            <td class="px-5 py-4 text-gray-500 whitespace-nowrap">${fmtDatum(b.created_at)}</td>
+            <td class="px-5 py-4 font-semibold text-gray-900 whitespace-nowrap">
+                ${b.vorname} ${b.nachname}
+            </td>
+            <td class="px-5 py-4 text-gray-600">
+                <div>${b.email}</div>
+                <div class="text-gray-400">${b.telefon}</div>
+            </td>
+            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">${b.deutschkenntnisse}</td>
+            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">${b.erfahrung}</td>
+            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">${fmtEintritt(b.eintrittstermin)}</td>
+            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">
+                ${b.fuehrerschein ? '✅' : '❌'} / ${b.eigenes_fahrzeug ? '✅' : '❌'}
+            </td>
+            <td class="px-5 py-4">${statusSelectHtml(b.id, b.status)}</td>
+            <td class="px-5 py-4">
+                <button onclick='openModal(${JSON.stringify(b)})'
+                        class="text-red-600 hover:text-red-800 font-semibold text-xs underline underline-offset-2">
+                    Details
+                </button>
+            </td>
+        </tr>
+    `).join('');
+
+    // Mobile Karten
+    document.getElementById('mobileCards').innerHTML = data.map(b => `
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div class="flex items-start justify-between mb-3">
+                <div>
+                    <p class="font-bold text-gray-900">${b.vorname} ${b.nachname}</p>
+                    <p class="text-xs text-gray-400">${fmtDatum(b.created_at)}</p>
+                </div>
+                ${statusBadge(b.status)}
+            </div>
+            <div class="space-y-1.5 text-sm text-gray-600 mb-4">
+                <p>📧 ${b.email}</p>
+                <p>📞 ${b.telefon}</p>
+                <p>🗣 ${b.deutschkenntnisse}</p>
+                <p>🔨 ${b.erfahrung}</p>
+                <p>📅 Ab ${fmtEintritt(b.eintrittstermin)}</p>
+                <p>🚗 Führerschein: ${jaNein(b.fuehrerschein)} · Auto: ${jaNein(b.eigenes_fahrzeug)}</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <select class="status-select flex-1" data-id="${b.id}" onchange="updateStatus(this)">
+                    <option value="neu"         ${b.status==='neu'         ? 'selected':''}>Neu</option>
+                    <option value="in_pruefung" ${b.status==='in_pruefung' ? 'selected':''}>In Prüfung</option>
+                    <option value="eingeladen"  ${b.status==='eingeladen'  ? 'selected':''}>Eingeladen</option>
+                    <option value="abgelehnt"   ${b.status==='abgelehnt'   ? 'selected':''}>Abgelehnt</option>
+                </select>
+                <button onclick='openModal(${JSON.stringify(b)})'
+                        class="text-red-600 hover:text-red-800 font-semibold text-sm">
+                    Details
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ── FILTER & SUCHE ────────────────────────────────
+function applyFilter() {
+    const q      = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.getElementById('filterStatus').value;
+
+    const filtered = allBewerbungen.filter(b => {
+        const matchSearch =
+            !q ||
+            b.vorname.toLowerCase().includes(q) ||
+            b.nachname.toLowerCase().includes(q) ||
+            b.email.toLowerCase().includes(q) ||
+            b.telefon.includes(q);
+        const matchStatus = !status || b.status === status;
+        return matchSearch && matchStatus;
+    });
+
+    renderTable(filtered);
+}
+
+document.getElementById('searchInput').addEventListener('input', applyFilter);
+document.getElementById('filterStatus').addEventListener('change', applyFilter);
+
+// ── STATUS ÄNDERN ─────────────────────────────────
+async function updateStatus(sel) {
+    const id     = sel.dataset.id;
+    const status = sel.value;
+
+    const { error } = await db
+        .from('bewerbungen')
+        .update({ status })
+        .eq('id', id);
+
+    if (error) {
+        alert('Fehler beim Aktualisieren des Status.');
+        console.error(error);
+        return;
+    }
+
+    const entry = allBewerbungen.find(b => b.id === id);
+    if (entry) entry.status = status;
+    renderStats(allBewerbungen);
+}
+
+// ── DETAIL MODAL ──────────────────────────────────
+function openModal(b) {
+    document.getElementById('modalContent').innerHTML = `
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Name</p>
+                <p class="font-semibold text-gray-900">${b.vorname} ${b.nachname}</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Eingegangen</p>
+                <p class="font-semibold text-gray-900">${fmtDatum(b.created_at)}</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">E-Mail</p>
+                <a href="mailto:${b.email}" class="text-red-600 font-semibold hover:underline">${b.email}</a>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Telefon</p>
+                <a href="tel:${b.telefon}" class="text-red-600 font-semibold hover:underline">${b.telefon}</a>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Deutschkenntnisse</p>
+                <p class="font-semibold text-gray-900">${b.deutschkenntnisse}</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Erfahrung</p>
+                <p class="font-semibold text-gray-900">${b.erfahrung}</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Frühester Eintritt</p>
+                <p class="font-semibold text-gray-900">${fmtEintritt(b.eintrittstermin)}</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Status</p>
+                <div>${statusBadge(b.status)}</div>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Führerschein</p>
+                <p class="font-semibold text-gray-900">${jaNein(b.fuehrerschein)}</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Eigenes Fahrzeug</p>
+                <p class="font-semibold text-gray-900">${jaNein(b.eigenes_fahrzeug)}</p>
+            </div>
+        </div>
+        ${b.nachricht ? `
+        <div class="mt-2 p-4 bg-gray-50 rounded-xl">
+            <p class="text-xs font-semibold text-gray-400 uppercase mb-1.5">Nachricht</p>
+            <p class="text-gray-700 text-sm leading-relaxed">${b.nachricht}</p>
+        </div>` : ''}
+        <div class="flex gap-3 pt-2">
+            <a href="mailto:${b.email}"
+               class="flex-1 text-center bg-black text-white font-bold py-3 rounded-xl
+                      text-sm hover:bg-gray-800 transition">
+                📧 E-Mail schreiben
+            </a>
+            <a href="tel:${b.telefon}"
+               class="flex-1 text-center bg-red-600 text-white font-bold py-3 rounded-xl
+                      text-sm hover:bg-red-700 transition">
+                📞 Anrufen
+            </a>
+        </div>
+    `;
+    document.getElementById('detailModal').classList.remove('hidden');
+}
+
+document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('detailModal').classList.add('hidden');
+});
+document.getElementById('detailModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget)
+        document.getElementById('detailModal').classList.add('hidden');
+});
+
+// ── BEWERBUNGEN LADEN ─────────────────────────────
+async function loadBewerbungen() {
+    const { data, error } = await db
+        .from('bewerbungen')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        document.getElementById('tableBody').innerHTML =
+            `<tr><td colspan="9" class="text-center py-12 text-red-500 font-medium">
+                Fehler beim Laden: ${error.message}
+            </td></tr>`;
+        return;
+    }
+
+    allBewerbungen = data;
+    renderStats(data);
+    renderTable(data);
+}
+
+// ── REALTIME UPDATES ──────────────────────────────
+function subscribeRealtime() {
+    db.channel('bewerbungen-changes')
+        .on('postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'bewerbungen' },
+            payload => {
+                allBewerbungen.unshift(payload.new);
+                renderStats(allBewerbungen);
+                applyFilter();
+            })
+        .subscribe();
+}
+
+// ── LOGIN / LOGOUT ────────────────────────────────
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    btn.disabled    = true;
+    btn.textContent = 'Einloggen…';
+    document.getElementById('loginError').classList.add('hidden');
+
+    const { error } = await db.auth.signInWithPassword({
+        email:    document.getElementById('loginEmail').value,
+        password: document.getElementById('loginPassword').value,
+    });
+
+    if (error) {
+        document.getElementById('loginError').classList.remove('hidden');
+        btn.disabled    = false;
+        btn.textContent = 'Einloggen';
+    } else {
+        showAdmin();
+    }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await db.auth.signOut();
+    document.getElementById('adminSection').style.display  = 'none';
+    document.getElementById('loginSection').style.display  = 'flex';
+    document.getElementById('logoutBtn').classList.add('hidden');
+});
+
+function showAdmin() {
+    document.getElementById('loginSection').style.display  = 'none';
+    document.getElementById('adminSection').style.display  = 'block';
+    document.getElementById('logoutBtn').classList.remove('hidden');
+    loadBewerbungen();
+    subscribeRealtime();
+}
+
+// Session prüfen beim Laden
+db.auth.getSession().then(({ data: { session } }) => {
+    if (session) showAdmin();
+});
+</script>
+</body>
+</html>
