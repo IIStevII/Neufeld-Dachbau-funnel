@@ -26,21 +26,21 @@
             box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
         }
 
-        .status-badge {
+        .badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.25rem 0.75rem;
+            gap: 0.3rem;
+            padding: 0.25rem 0.7rem;
             border-radius: 9999px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 700;
-            letter-spacing: 0.02em;
             white-space: nowrap;
         }
-        .status-neu         { background: #dbeafe; color: #1d4ed8; }
-        .status-in_pruefung { background: #fef9c3; color: #854d0e; }
-        .status-eingeladen  { background: #dcfce7; color: #166534; }
-        .status-abgelehnt   { background: #fee2e2; color: #991b1b; }
+        .badge-neu         { background: #dbeafe; color: #1d4ed8; }
+        .badge-in_pruefung { background: #fef9c3; color: #854d0e; }
+        .badge-eingeladen  { background: #dcfce7; color: #166534; }
+        .badge-abgelehnt   { background: #fee2e2; color: #991b1b; }
+        .badge-abgebrochen { background: #fff7ed; color: #c2410c; }
 
         .status-select {
             font-family: 'Inter', sans-serif;
@@ -85,13 +85,13 @@
         }
         .fade-in { animation: fadeIn 0.3s ease both; }
 
-        #loginSection  { display: flex; }
-        #adminSection  { display: none; }
+        #loginSection { display: flex; }
+        #adminSection { display: none; }
     </style>
 </head>
 <body>
 
-<!-- ── HEADER ─────────────────────────────────── -->
+<!-- HEADER -->
 <header class="bg-black py-3 px-6 shadow-xl">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
         <div class="flex items-center gap-1">
@@ -99,70 +99,63 @@
             <span class="text-red-500 font-black text-lg tracking-tight ml-1">DACHBAU</span>
             <span class="text-gray-500 font-medium ml-3 text-sm">/ Admin</span>
         </div>
-        <button id="logoutBtn"
-                class="hidden text-gray-400 hover:text-white text-sm font-medium transition">
+        <button id="logoutBtn" class="hidden text-gray-400 hover:text-white text-sm font-medium transition">
             Abmelden
         </button>
     </div>
 </header>
 
-<!-- ── LOGIN ──────────────────────────────────── -->
-<section id="loginSection"
-         class="min-h-screen items-center justify-center p-6">
+<!-- LOGIN -->
+<section id="loginSection" class="min-h-screen items-center justify-center p-6">
     <div class="w-full max-w-sm fade-in">
         <div class="text-center mb-8">
             <div class="text-4xl mb-3">🔒</div>
-            <h1 class="text-2xl font-black text-gray-900">Admin-Login</h1>
-            <p class="text-gray-400 text-sm mt-1">Neufeld Dachbau · Bewerbungsverwaltung</p>
+            <h1 class="text-2xl font-black text-gray-900">Admin Login</h1>
+            <p class="text-gray-400 text-sm mt-1">Neufeld Dachbau Bewerbungsverwaltung</p>
         </div>
-
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <form id="loginForm">
                 <div class="mb-5">
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">E-Mail</label>
                     <input type="email" id="loginEmail" required
-                           placeholder="admin@neufeld-dachbau.de"
-                           class="form-input">
+                           placeholder="admin@neufeld-dachbau.de" class="form-input">
                 </div>
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Passwort</label>
                     <input type="password" id="loginPassword" required
-                           placeholder="••••••••"
-                           class="form-input">
+                           placeholder="••••••••" class="form-input">
                 </div>
-
                 <div id="loginError"
-                     class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-xl
-                            text-red-700 text-sm font-medium">
+                     class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
                     Falsche E-Mail oder Passwort.
                 </div>
-
-                <button type="submit" id="loginBtn" class="btn-red w-full">
-                    Einloggen
-                </button>
+                <button type="submit" id="loginBtn" class="btn-red w-full">Einloggen</button>
             </form>
         </div>
     </div>
 </section>
 
-<!-- ── ADMIN BEREICH ──────────────────────────── -->
+<!-- ADMIN BEREICH -->
 <section id="adminSection" class="min-h-screen p-6">
     <div class="max-w-7xl mx-auto">
 
         <!-- Statistiken -->
-        <div id="statsRow" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8"></div>
+        <div id="statsRow" class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8"></div>
 
-        <!-- Filter & Suche -->
+        <!-- Filter -->
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-6
                     flex flex-col sm:flex-row gap-3">
-            <input type="text" id="searchInput" placeholder="🔍 Suche nach Name, E-Mail, Telefon..."
+            <input type="text" id="searchInput"
+                   placeholder="🔍 Suche nach Name, E-Mail oder Telefon..."
                    class="form-input flex-1">
-            <select id="filterStatus" class="form-input sm:w-48">
-                <option value="">Alle Status</option>
-                <option value="neu">Neu</option>
-                <option value="in_pruefung">In Prüfung</option>
-                <option value="eingeladen">Eingeladen</option>
-                <option value="abgelehnt">Abgelehnt</option>
+            <select id="filterStatus" class="form-input sm:w-52">
+                <option value="">Alle anzeigen</option>
+                <option value="vollstaendig">Vollständig abgeschlossen</option>
+                <option value="abgebrochen">Abgebrochen</option>
+                <option value="neu">Status: Neu</option>
+                <option value="in_pruefung">Status: In Prüfung</option>
+                <option value="eingeladen">Status: Eingeladen</option>
+                <option value="abgelehnt">Status: Abgelehnt</option>
             </select>
         </div>
 
@@ -179,19 +172,15 @@
                             <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Datum</th>
                             <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Name</th>
                             <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Kontakt</th>
-                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Deutsch</th>
+                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Fortschritt</th>
                             <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Erfahrung</th>
-                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Eintritt</th>
-                            <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">FS / Auto</th>
                             <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Status</th>
                             <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wide">Details</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="9" class="text-center py-12 text-gray-400">
-                                Lade Bewerbungen…
-                            </td>
+                            <td colspan="7" class="text-center py-12 text-gray-400">Lade Bewerbungen…</td>
                         </tr>
                     </tbody>
                 </table>
@@ -200,33 +189,27 @@
 
         <!-- Karten Mobile -->
         <div id="mobileCards" class="sm:hidden space-y-4"></div>
-
     </div>
 </section>
 
-<!-- ── DETAIL MODAL ───────────────────────────── -->
+<!-- DETAIL MODAL -->
 <div id="detailModal"
      class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50
             flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto fade-in">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
             <h3 class="font-black text-gray-900 text-lg">Bewerbungsdetails</h3>
-            <button id="closeModal"
-                    class="text-gray-400 hover:text-gray-700 text-2xl font-light leading-none">
-                &times;
-            </button>
+            <button id="closeModal" class="text-gray-400 hover:text-gray-700 text-2xl font-light">&times;</button>
         </div>
         <div id="modalContent" class="p-6 space-y-4"></div>
     </div>
 </div>
 
 <script>
-// ════════════════════════════════════════════════════
-//  SUPABASE ZUGANGSDATEN — HIER ANPASSEN
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════
 const SUPABASE_URL      = 'https://jykuvqucvzawuvmfzxzz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5a3V2cXVjdnphd3V2bWZ6eHp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTQ5ODcsImV4cCI6MjA5NTM5MDk4N30.X7DVe2uCCPkJ6NSpvVDetbqyJzCsiY1ELooFCdWTht4';
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════
 
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -245,19 +228,40 @@ function fmtEintritt(iso) {
     const [y, m, d] = iso.split('-');
     return `${d}.${m}.${y}`;
 }
+function jaNein(val) {
+    if (val === null || val === undefined) return '–';
+    return val ? '✅ Ja' : '❌ Nein';
+}
+
+const SCHRITT_LABELS = {
+    1: 'Name eingegeben',
+    2: 'Kontakt angegeben',
+    3: 'Deutschniveau gewählt',
+    4: 'Erfahrung gewählt',
+    5: 'Eintrittsdaten angegeben',
+    6: 'Abgeschlossen',
+};
+
+function fortschrittBadge(b) {
+    if (b.abgeschlossen) {
+        return `<span class="badge badge-eingeladen">✅ Vollständig</span>`;
+    }
+    const schritt = b.letzter_schritt || 0;
+    const label   = SCHRITT_LABELS[schritt] || 'Gestartet';
+    return `<span class="badge badge-abgebrochen">⚠️ Abgebrochen nach Schritt ${schritt}/6</span>`;
+}
+
 function statusBadge(status) {
     const map = {
-        neu:         ['Neu',         'status-neu'],
-        in_pruefung: ['In Prüfung',  'status-in_pruefung'],
-        eingeladen:  ['Eingeladen',  'status-eingeladen'],
-        abgelehnt:   ['Abgelehnt',   'status-abgelehnt'],
+        neu:         ['Neu',        'badge-neu'],
+        in_pruefung: ['In Prüfung', 'badge-in_pruefung'],
+        eingeladen:  ['Eingeladen', 'badge-eingeladen'],
+        abgelehnt:   ['Abgelehnt',  'badge-abgelehnt'],
     };
-    const [label, cls] = map[status] || ['Unbekannt', 'status-neu'];
-    return `<span class="status-badge ${cls}">${label}</span>`;
+    const [label, cls] = map[status] || ['Neu', 'badge-neu'];
+    return `<span class="badge ${cls}">${label}</span>`;
 }
-function jaNein(bool) {
-    return bool ? '✅ Ja' : '❌ Nein';
-}
+
 function statusSelectHtml(id, current) {
     const opts = [
         ['neu',         'Neu'],
@@ -272,17 +276,18 @@ function statusSelectHtml(id, current) {
 
 // ── STATISTIKEN ───────────────────────────────────
 function renderStats(data) {
-    const counts = { neu: 0, in_pruefung: 0, eingeladen: 0, abgelehnt: 0 };
-    data.forEach(b => { if (counts[b.status] !== undefined) counts[b.status]++; });
+    const vollstaendig = data.filter(b => b.abgeschlossen).length;
+    const abgebrochen  = data.filter(b => !b.abgeschlossen).length;
+    const eingeladen   = data.filter(b => b.abgeschlossen && b.status === 'eingeladen').length;
+    const neu          = data.filter(b => b.abgeschlossen && b.status === 'neu').length;
 
-    const stats = [
-        { label: 'Gesamt',      value: data.length,           color: 'text-gray-900' },
-        { label: 'Neu',         value: counts.neu,            color: 'text-blue-600'  },
-        { label: 'Eingeladen',  value: counts.eingeladen,     color: 'text-green-600' },
-        { label: 'Abgelehnt',   value: counts.abgelehnt,      color: 'text-red-600'   },
-    ];
-
-    document.getElementById('statsRow').innerHTML = stats.map(s => `
+    document.getElementById('statsRow').innerHTML = [
+        { label: 'Gesamt',       value: data.length,    color: 'text-gray-900' },
+        { label: 'Vollständig',  value: vollstaendig,   color: 'text-green-600' },
+        { label: 'Abgebrochen',  value: abgebrochen,    color: 'text-orange-500' },
+        { label: 'Neu',          value: neu,            color: 'text-blue-600' },
+        { label: 'Eingeladen',   value: eingeladen,     color: 'text-green-700' },
+    ].map(s => `
         <div class="stat-card">
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${s.label}</p>
             <p class="text-3xl font-black ${s.color}">${s.value}</p>
@@ -292,34 +297,35 @@ function renderStats(data) {
 
 // ── TABELLE RENDERN ───────────────────────────────
 function renderTable(data) {
-    document.getElementById('countBadge').textContent = `${data.length} Bewerbung${data.length !== 1 ? 'en' : ''}`;
+    document.getElementById('countBadge').textContent =
+        `${data.length} Eintrag${data.length !== 1 ? 'träge' : ''}`;
 
     if (data.length === 0) {
-        document.getElementById('tableBody').innerHTML = `
-            <tr><td colspan="9" class="text-center py-12 text-gray-400">Keine Einträge gefunden.</td></tr>`;
-        document.getElementById('mobileCards').innerHTML = `
-            <div class="text-center py-8 text-gray-400">Keine Einträge gefunden.</div>`;
+        const empty = `<div class="text-center py-12 text-gray-400">Keine Einträge gefunden.</div>`;
+        document.getElementById('tableBody').innerHTML =
+            `<tr><td colspan="7" class="text-center py-12 text-gray-400">Keine Einträge gefunden.</td></tr>`;
+        document.getElementById('mobileCards').innerHTML = empty;
         return;
     }
 
-    // Desktop Tabelle
+    // Desktop
     document.getElementById('tableBody').innerHTML = data.map(b => `
         <tr class="border-b border-gray-50 transition">
             <td class="px-5 py-4 text-gray-500 whitespace-nowrap">${fmtDatum(b.created_at)}</td>
             <td class="px-5 py-4 font-semibold text-gray-900 whitespace-nowrap">
-                ${b.vorname} ${b.nachname}
+                ${b.vorname || ''} ${b.nachname || ''}
             </td>
             <td class="px-5 py-4 text-gray-600">
-                <div>${b.email}</div>
-                <div class="text-gray-400">${b.telefon}</div>
+                <div>${b.email || '–'}</div>
+                <div class="text-gray-400 text-xs">${b.telefon || '–'}</div>
             </td>
-            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">${b.deutschkenntnisse}</td>
-            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">${b.erfahrung}</td>
-            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">${fmtEintritt(b.eintrittstermin)}</td>
-            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">
-                ${b.fuehrerschein ? '✅' : '❌'} / ${b.eigenes_fahrzeug ? '✅' : '❌'}
+            <td class="px-5 py-4">${fortschrittBadge(b)}</td>
+            <td class="px-5 py-4 text-gray-600 whitespace-nowrap">${b.erfahrung || '–'}</td>
+            <td class="px-5 py-4">
+                ${b.abgeschlossen
+                    ? statusSelectHtml(b.id, b.status)
+                    : `<span class="text-xs text-gray-400">Unvollständig</span>`}
             </td>
-            <td class="px-5 py-4">${statusSelectHtml(b.id, b.status)}</td>
             <td class="px-5 py-4">
                 <button onclick='openModal(${JSON.stringify(b)})'
                         class="text-red-600 hover:text-red-800 font-semibold text-xs underline underline-offset-2">
@@ -329,33 +335,28 @@ function renderTable(data) {
         </tr>
     `).join('');
 
-    // Mobile Karten
+    // Mobile
     document.getElementById('mobileCards').innerHTML = data.map(b => `
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <div class="flex items-start justify-between mb-3">
                 <div>
-                    <p class="font-bold text-gray-900">${b.vorname} ${b.nachname}</p>
+                    <p class="font-bold text-gray-900">${b.vorname || ''} ${b.nachname || ''}</p>
                     <p class="text-xs text-gray-400">${fmtDatum(b.created_at)}</p>
                 </div>
-                ${statusBadge(b.status)}
+                ${fortschrittBadge(b)}
             </div>
-            <div class="space-y-1.5 text-sm text-gray-600 mb-4">
-                <p>📧 ${b.email}</p>
-                <p>📞 ${b.telefon}</p>
-                <p>🗣 ${b.deutschkenntnisse}</p>
-                <p>🔨 ${b.erfahrung}</p>
-                <p>📅 Ab ${fmtEintritt(b.eintrittstermin)}</p>
-                <p>🚗 Führerschein: ${jaNein(b.fuehrerschein)} · Auto: ${jaNein(b.eigenes_fahrzeug)}</p>
+            <div class="space-y-1 text-sm text-gray-600 mb-4">
+                <p>📧 ${b.email || '–'}</p>
+                <p>📞 ${b.telefon || '–'}</p>
+                ${b.erfahrung ? `<p>🔨 ${b.erfahrung}</p>` : ''}
+                ${b.eintrittstermin ? `<p>📅 Ab ${fmtEintritt(b.eintrittstermin)}</p>` : ''}
             </div>
             <div class="flex items-center gap-3">
-                <select class="status-select flex-1" data-id="${b.id}" onchange="updateStatus(this)">
-                    <option value="neu"         ${b.status==='neu'         ? 'selected':''}>Neu</option>
-                    <option value="in_pruefung" ${b.status==='in_pruefung' ? 'selected':''}>In Prüfung</option>
-                    <option value="eingeladen"  ${b.status==='eingeladen'  ? 'selected':''}>Eingeladen</option>
-                    <option value="abgelehnt"   ${b.status==='abgelehnt'   ? 'selected':''}>Abgelehnt</option>
-                </select>
+                ${b.abgeschlossen
+                    ? statusSelectHtml(b.id, b.status)
+                    : `<span class="text-xs text-orange-500 font-semibold">Abgebrochen bei Schritt ${b.letzter_schritt || 0} von 6</span>`}
                 <button onclick='openModal(${JSON.stringify(b)})'
-                        class="text-red-600 hover:text-red-800 font-semibold text-sm">
+                        class="text-red-600 hover:text-red-800 font-semibold text-sm ml-auto">
                     Details
                 </button>
             </div>
@@ -366,17 +367,22 @@ function renderTable(data) {
 // ── FILTER & SUCHE ────────────────────────────────
 function applyFilter() {
     const q      = document.getElementById('searchInput').value.toLowerCase();
-    const status = document.getElementById('filterStatus').value;
+    const filter = document.getElementById('filterStatus').value;
 
     const filtered = allBewerbungen.filter(b => {
-        const matchSearch =
+        const matchQ =
             !q ||
-            b.vorname.toLowerCase().includes(q) ||
-            b.nachname.toLowerCase().includes(q) ||
-            b.email.toLowerCase().includes(q) ||
-            b.telefon.includes(q);
-        const matchStatus = !status || b.status === status;
-        return matchSearch && matchStatus;
+            (b.vorname  || '').toLowerCase().includes(q) ||
+            (b.nachname || '').toLowerCase().includes(q) ||
+            (b.email    || '').toLowerCase().includes(q) ||
+            (b.telefon  || '').includes(q);
+
+        let matchF = true;
+        if (filter === 'vollstaendig') matchF = b.abgeschlossen === true;
+        else if (filter === 'abgebrochen') matchF = b.abgeschlossen === false;
+        else if (filter) matchF = b.abgeschlossen && b.status === filter;
+
+        return matchQ && matchF;
     });
 
     renderTable(filtered);
@@ -387,32 +393,31 @@ document.getElementById('filterStatus').addEventListener('change', applyFilter);
 
 // ── STATUS ÄNDERN ─────────────────────────────────
 async function updateStatus(sel) {
-    const id     = sel.dataset.id;
-    const status = sel.value;
-
     const { error } = await db
         .from('bewerbungen')
-        .update({ status })
-        .eq('id', id);
+        .update({ status: sel.value })
+        .eq('id', sel.dataset.id);
 
-    if (error) {
-        alert('Fehler beim Aktualisieren des Status.');
-        console.error(error);
-        return;
-    }
+    if (error) { alert('Fehler beim Aktualisieren.'); return; }
 
-    const entry = allBewerbungen.find(b => b.id === id);
-    if (entry) entry.status = status;
+    const entry = allBewerbungen.find(b => b.id === sel.dataset.id);
+    if (entry) entry.status = sel.value;
     renderStats(allBewerbungen);
 }
 
 // ── DETAIL MODAL ──────────────────────────────────
 function openModal(b) {
+    const schritt = b.letzter_schritt || 0;
     document.getElementById('modalContent').innerHTML = `
+        <div class="mb-3">
+            ${b.abgeschlossen
+                ? `<span class="badge badge-eingeladen text-sm">✅ Vollständig ausgefüllt</span>`
+                : `<span class="badge badge-abgebrochen text-sm">⚠️ Abgebrochen nach Schritt ${schritt} von 6 — ${SCHRITT_LABELS[schritt] || ''}</span>`}
+        </div>
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Name</p>
-                <p class="font-semibold text-gray-900">${b.vorname} ${b.nachname}</p>
+                <p class="font-semibold text-gray-900">${b.vorname || '–'} ${b.nachname || ''}</p>
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Eingegangen</p>
@@ -420,19 +425,19 @@ function openModal(b) {
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">E-Mail</p>
-                <a href="mailto:${b.email}" class="text-red-600 font-semibold hover:underline">${b.email}</a>
+                <a href="mailto:${b.email}" class="text-red-600 font-semibold hover:underline">${b.email || '–'}</a>
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Telefon</p>
-                <a href="tel:${b.telefon}" class="text-red-600 font-semibold hover:underline">${b.telefon}</a>
+                <a href="tel:${b.telefon}" class="text-red-600 font-semibold hover:underline">${b.telefon || '–'}</a>
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Deutschkenntnisse</p>
-                <p class="font-semibold text-gray-900">${b.deutschkenntnisse}</p>
+                <p class="font-semibold text-gray-900">${b.deutschkenntnisse || '–'}</p>
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Erfahrung</p>
-                <p class="font-semibold text-gray-900">${b.erfahrung}</p>
+                <p class="font-semibold text-gray-900">${b.erfahrung || '–'}</p>
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Frühester Eintritt</p>
@@ -440,7 +445,7 @@ function openModal(b) {
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Status</p>
-                <div>${statusBadge(b.status)}</div>
+                ${b.abgeschlossen ? statusBadge(b.status) : '<span class="text-gray-400 text-sm">–</span>'}
             </div>
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase mb-0.5">Führerschein</p>
@@ -452,22 +457,21 @@ function openModal(b) {
             </div>
         </div>
         ${b.nachricht ? `
-        <div class="mt-2 p-4 bg-gray-50 rounded-xl">
+        <div class="p-4 bg-gray-50 rounded-xl">
             <p class="text-xs font-semibold text-gray-400 uppercase mb-1.5">Nachricht</p>
             <p class="text-gray-700 text-sm leading-relaxed">${b.nachricht}</p>
         </div>` : ''}
+        ${b.email ? `
         <div class="flex gap-3 pt-2">
             <a href="mailto:${b.email}"
-               class="flex-1 text-center bg-black text-white font-bold py-3 rounded-xl
-                      text-sm hover:bg-gray-800 transition">
+               class="flex-1 text-center bg-black text-white font-bold py-3 rounded-xl text-sm hover:bg-gray-800 transition">
                 📧 E-Mail schreiben
             </a>
             <a href="tel:${b.telefon}"
-               class="flex-1 text-center bg-red-600 text-white font-bold py-3 rounded-xl
-                      text-sm hover:bg-red-700 transition">
+               class="flex-1 text-center bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 transition">
                 📞 Anrufen
             </a>
-        </div>
+        </div>` : ''}
     `;
     document.getElementById('detailModal').classList.remove('hidden');
 }
@@ -475,7 +479,7 @@ function openModal(b) {
 document.getElementById('closeModal').addEventListener('click', () => {
     document.getElementById('detailModal').classList.add('hidden');
 });
-document.getElementById('detailModal').addEventListener('click', (e) => {
+document.getElementById('detailModal').addEventListener('click', e => {
     if (e.target === e.currentTarget)
         document.getElementById('detailModal').classList.add('hidden');
 });
@@ -489,9 +493,7 @@ async function loadBewerbungen() {
 
     if (error) {
         document.getElementById('tableBody').innerHTML =
-            `<tr><td colspan="9" class="text-center py-12 text-red-500 font-medium">
-                Fehler beim Laden: ${error.message}
-            </td></tr>`;
+            `<tr><td colspan="7" class="text-center py-12 text-red-500">${error.message}</td></tr>`;
         return;
     }
 
@@ -500,21 +502,17 @@ async function loadBewerbungen() {
     renderTable(data);
 }
 
-// ── REALTIME UPDATES ──────────────────────────────
+// ── REALTIME ──────────────────────────────────────
 function subscribeRealtime() {
     db.channel('bewerbungen-changes')
         .on('postgres_changes',
-            { event: 'INSERT', schema: 'public', table: 'bewerbungen' },
-            payload => {
-                allBewerbungen.unshift(payload.new);
-                renderStats(allBewerbungen);
-                applyFilter();
-            })
+            { event: '*', schema: 'public', table: 'bewerbungen' },
+            () => loadBewerbungen())
         .subscribe();
 }
 
-// ── LOGIN / LOGOUT ────────────────────────────────
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+// ── AUTH ──────────────────────────────────────────
+document.getElementById('loginForm').addEventListener('submit', async e => {
     e.preventDefault();
     const btn = document.getElementById('loginBtn');
     btn.disabled    = true;
@@ -537,20 +535,19 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     await db.auth.signOut();
-    document.getElementById('adminSection').style.display  = 'none';
-    document.getElementById('loginSection').style.display  = 'flex';
+    document.getElementById('adminSection').style.display = 'none';
+    document.getElementById('loginSection').style.display = 'flex';
     document.getElementById('logoutBtn').classList.add('hidden');
 });
 
 function showAdmin() {
-    document.getElementById('loginSection').style.display  = 'none';
-    document.getElementById('adminSection').style.display  = 'block';
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('adminSection').style.display = 'block';
     document.getElementById('logoutBtn').classList.remove('hidden');
     loadBewerbungen();
     subscribeRealtime();
 }
 
-// Session prüfen beim Laden
 db.auth.getSession().then(({ data: { session } }) => {
     if (session) showAdmin();
 });

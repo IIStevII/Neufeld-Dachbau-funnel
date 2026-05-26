@@ -42,23 +42,27 @@
             border-color: #dc2626;
             box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
         }
-        .form-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.8rem center;
-            background-repeat: no-repeat;
-            background-size: 1.4em 1.4em;
-            padding-right: 2.5rem;
-        }
 
-        .radio-card {
-            position: relative;
+        .option-card {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.15s;
         }
-        .radio-card input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            width: 0; height: 0;
-        }
+        .option-card:hover { border-color: #fca5a5; background: #fff9f9; }
+        .option-card.selected { border-color: #dc2626; background: #fff1f1; }
+        .option-card.selected .opt-title { color: #dc2626; }
+
+        .radio-card { position: relative; }
+        .radio-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
         .radio-card label {
             display: block;
             border: 2px solid #e5e7eb;
@@ -71,13 +75,24 @@
             transition: all 0.15s;
             user-select: none;
         }
-        .radio-card label:hover {
-            border-color: #fca5a5;
-        }
+        .radio-card label:hover { border-color: #fca5a5; }
         .radio-card input[type="radio"]:checked + label {
             border-color: #dc2626;
             background: #fff1f1;
             color: #dc2626;
+        }
+
+        .progress-bg {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #dc2626;
+            border-radius: 999px;
+            transition: width 0.4s ease;
         }
 
         .btn-red {
@@ -86,16 +101,41 @@
             padding: 1rem 2rem;
             border-radius: 0.75rem;
             font-weight: 800;
-            font-size: 1.1rem;
-            width: 100%;
+            font-size: 1.05rem;
             cursor: pointer;
             border: none;
             font-family: 'Inter', sans-serif;
-            transition: background 0.15s, transform 0.1s;
+            transition: background 0.15s;
+            width: 100%;
         }
         .btn-red:hover { background: #b91c1c; }
-        .btn-red:active { transform: scale(0.99); }
         .btn-red:disabled { background: #9ca3af; cursor: not-allowed; }
+
+        .btn-back {
+            background: transparent;
+            color: #6b7280;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: 1.5px solid #e5e7eb;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.15s;
+            width: 100%;
+        }
+        .btn-back:hover { border-color: #9ca3af; color: #374151; }
+
+        .step { display: none; }
+        .step.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(16px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
 
         .benefit-card {
             display: flex;
@@ -116,10 +156,10 @@
 </head>
 <body class="bg-gray-50">
 
-<!-- ── HEADER ─────────────────────────────────── -->
+<!-- HEADER -->
 <header class="bg-black py-3 px-5 sticky top-0 z-50 shadow-xl">
     <div class="max-w-4xl mx-auto flex items-center justify-between">
-        <div class="flex items-center gap-1">
+        <div class="flex items-center">
             <span class="text-white font-black text-xl tracking-tight">NEUFELD</span>
             <span class="text-red-500 font-black text-xl tracking-tight ml-1">DACHBAU</span>
         </div>
@@ -130,13 +170,13 @@
     </div>
 </header>
 
-<!-- ── HERO ───────────────────────────────────── -->
+<!-- HERO -->
 <section class="hero-bg text-white py-24 px-5 pb-32">
     <div class="max-w-3xl mx-auto text-center relative z-10 fade-in">
         <div class="inline-flex items-center gap-2 bg-red-600/20 border border-red-600/40
                     text-red-400 text-sm font-semibold px-4 py-1.5 rounded-full mb-7">
             <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-            Wir suchen Verstärkung – Stellen offen!
+            Wir suchen Verstärkung. Stellen offen!
         </div>
 
         <h1 class="text-4xl sm:text-6xl font-black leading-tight mb-6">
@@ -146,20 +186,20 @@
         </h1>
 
         <p class="text-gray-300 text-lg sm:text-xl max-w-xl mx-auto mb-10">
-            Wir suchen <strong class="text-white">Dachdecker (m/w/d)</strong> für unser wachsendes Team —
-            faire Bezahlung, starkes Team, sichere Zukunft.
+            Wir suchen <strong class="text-white">Dachdecker (m/w/d)</strong> für unser wachsendes Team.
+            Faire Bezahlung, starkes Team und eine sichere Zukunft warten auf dich.
         </p>
 
         <a href="#bewerben"
            class="inline-block bg-red-600 hover:bg-red-700 text-white font-black text-lg
                   px-10 py-4 rounded-2xl transition transform hover:scale-105 shadow-lg shadow-red-900/40">
-            Kostenlos bewerben &rarr;
+            Kostenlos bewerben →
         </a>
-        <p class="text-gray-600 text-sm mt-4">⏱ Nur 2 Minuten — direkt auf dem Handy</p>
+        <p class="text-gray-600 text-sm mt-4">Nur 2 Minuten. Direkt auf dem Handy.</p>
     </div>
 </section>
 
-<!-- ── WARUM WIR ───────────────────────────────── -->
+<!-- BENEFITS -->
 <section class="py-16 px-5 bg-gray-50">
     <div class="max-w-4xl mx-auto">
         <h2 class="text-3xl font-black text-gray-900 text-center mb-2">Warum Neufeld Dachbau?</h2>
@@ -171,7 +211,7 @@
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-1">Faire Bezahlung</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
-                        Überdurchschnittliches Gehalt je nach Erfahrung — pünktlich und verlässlich.
+                        Überdurchschnittliches Gehalt je nach Erfahrung. Pünktlich und verlässlich.
                     </p>
                 </div>
             </div>
@@ -180,7 +220,7 @@
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-1">Familiäres Team</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
-                        Kein Stress, kein Druck von oben — wir halten zusammen und helfen uns gegenseitig.
+                        Kein Stress, kein Druck von oben. Wir halten zusammen und helfen uns.
                     </p>
                 </div>
             </div>
@@ -198,7 +238,7 @@
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-1">Unbefristeter Vertrag</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
-                        Sicherer Arbeitsplatz mit echter Perspektive — keine Zeitarbeit, kein Stress.
+                        Sicherer Arbeitsplatz mit echter Perspektive. Keine Zeitarbeit, kein Stress.
                     </p>
                 </div>
             </div>
@@ -206,217 +246,377 @@
     </div>
 </section>
 
-<!-- ── BEWERBUNGSFORMULAR ─────────────────────── -->
+<!-- MULTI-STEP FORM -->
 <section id="bewerben" class="py-16 px-5 bg-white">
     <div class="max-w-xl mx-auto">
-        <div class="text-center mb-10">
-            <h2 class="text-3xl font-black text-gray-900 mb-2">Jetzt bewerben</h2>
-            <p class="text-gray-400">Füll das Formular aus — wir melden uns innerhalb von 24h</p>
+
+        <!-- Progress -->
+        <div class="mb-8" id="progressSection">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-semibold text-gray-500">
+                    Schritt <span id="stepDisplay">1</span> von 6
+                </span>
+                <span class="text-sm font-bold text-red-600" id="stepPercent">17%</span>
+            </div>
+            <div class="progress-bg">
+                <div class="progress-fill" id="progressFill" style="width: 17%"></div>
+            </div>
         </div>
 
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
 
-            <form id="bewerbungsFormular">
-
-                <!-- Name -->
-                <div class="grid grid-cols-2 gap-3 mb-5">
+            <!-- SCHRITT 1: Name -->
+            <div class="step active" data-step="1">
+                <h2 class="text-2xl font-black text-gray-900 mb-1">Wie heißt du?</h2>
+                <p class="text-gray-400 text-sm mb-6">Sag uns deinen vollständigen Namen.</p>
+                <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Vorname *</label>
-                        <input type="text" name="vorname" required placeholder="Max" class="form-input">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Vorname</label>
+                        <input type="text" id="vorname" placeholder="Max" class="form-input">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nachname *</label>
-                        <input type="text" name="nachname" required placeholder="Mustermann" class="form-input">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nachname</label>
+                        <input type="text" id="nachname" placeholder="Mustermann" class="form-input">
                     </div>
                 </div>
+            </div>
 
-                <!-- E-Mail -->
-                <div class="mb-5">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">E-Mail-Adresse *</label>
-                    <input type="email" name="email" required placeholder="max@beispiel.de" class="form-input">
+            <!-- SCHRITT 2: Kontakt -->
+            <div class="step" data-step="2">
+                <h2 class="text-2xl font-black text-gray-900 mb-1">Wie erreichen wir dich?</h2>
+                <p class="text-gray-400 text-sm mb-6">Wir melden uns innerhalb von 24 Stunden.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">E-Mail-Adresse</label>
+                        <input type="email" id="email" placeholder="max@beispiel.de" class="form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Telefonnummer</label>
+                        <input type="tel" id="telefon" placeholder="+49 151 234 56789" class="form-input">
+                    </div>
                 </div>
+            </div>
 
-                <!-- Telefon -->
-                <div class="mb-5">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Telefonnummer *</label>
-                    <input type="tel" name="telefon" required placeholder="+49 151 234 56789" class="form-input">
-                </div>
-
-                <!-- Deutschkenntnisse -->
-                <div class="mb-5">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Deutschkenntnisse *</label>
-                    <select name="deutschkenntnisse" required class="form-input form-select">
-                        <option value="">Bitte wählen...</option>
-                        <option value="Grundkenntnisse (A1-A2)">Grundkenntnisse (A1–A2)</option>
-                        <option value="Gut (B1-B2)">Gut (B1–B2)</option>
-                        <option value="Fließend (C1)">Fließend (C1)</option>
-                        <option value="Muttersprache / Sehr gut (C2)">Muttersprache / Sehr gut (C2)</option>
-                    </select>
-                </div>
-
-                <!-- Erfahrung -->
-                <div class="mb-5">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Erfahrung als Dachdecker *
-                    </label>
-                    <select name="erfahrung" required class="form-input form-select">
-                        <option value="">Bitte wählen...</option>
-                        <option value="Keine / Quereinsteiger">Keine / Quereinsteiger</option>
-                        <option value="1–2 Jahre">1–2 Jahre</option>
-                        <option value="3–5 Jahre">3–5 Jahre</option>
-                        <option value="Mehr als 5 Jahre">Mehr als 5 Jahre</option>
-                    </select>
-                </div>
-
-                <!-- Eintrittstermin -->
-                <div class="mb-5">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Frühester Eintrittstermin *
-                    </label>
-                    <input type="date" name="eintrittstermin" required class="form-input">
-                </div>
-
-                <!-- Führerschein -->
-                <div class="mb-5">
-                    <p class="text-sm font-semibold text-gray-700 mb-3">Führerschein vorhanden? *</p>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="radio-card">
-                            <input type="radio" name="fuehrerschein" id="fs_ja" value="ja" required>
-                            <label for="fs_ja">✅ Ja</label>
+            <!-- SCHRITT 3: Deutschkenntnisse -->
+            <div class="step" data-step="3">
+                <h2 class="text-2xl font-black text-gray-900 mb-1">Wie gut sprichst du Deutsch?</h2>
+                <p class="text-gray-400 text-sm mb-6">Wähle dein Sprachniveau aus.</p>
+                <div class="space-y-3">
+                    <button class="option-card" data-value="Grundkenntnisse (A1 bis A2)" onclick="selectOption(this,'deutsch')">
+                        <span class="text-2xl">🗣️</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">Grundkenntnisse</p>
+                            <p class="text-sm text-gray-400">A1 bis A2</p>
                         </div>
-                        <div class="radio-card">
-                            <input type="radio" name="fuehrerschein" id="fs_nein" value="nein">
-                            <label for="fs_nein">❌ Nein</label>
+                    </button>
+                    <button class="option-card" data-value="Gut (B1 bis B2)" onclick="selectOption(this,'deutsch')">
+                        <span class="text-2xl">💬</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">Gut</p>
+                            <p class="text-sm text-gray-400">B1 bis B2</p>
+                        </div>
+                    </button>
+                    <button class="option-card" data-value="Fließend (C1)" onclick="selectOption(this,'deutsch')">
+                        <span class="text-2xl">✅</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">Fließend</p>
+                            <p class="text-sm text-gray-400">C1</p>
+                        </div>
+                    </button>
+                    <button class="option-card" data-value="Muttersprache (C2)" onclick="selectOption(this,'deutsch')">
+                        <span class="text-2xl">🇩🇪</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">Muttersprache</p>
+                            <p class="text-sm text-gray-400">C2</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCHRITT 4: Erfahrung -->
+            <div class="step" data-step="4">
+                <h2 class="text-2xl font-black text-gray-900 mb-1">Wie viel Erfahrung hast du?</h2>
+                <p class="text-gray-400 text-sm mb-6">Als Dachdecker oder in einem ähnlichen Beruf.</p>
+                <div class="space-y-3">
+                    <button class="option-card" data-value="Keine Erfahrung" onclick="selectOption(this,'erfahrung')">
+                        <span class="text-2xl">🌱</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">Keine Erfahrung</p>
+                            <p class="text-sm text-gray-400">Quereinsteiger willkommen</p>
+                        </div>
+                    </button>
+                    <button class="option-card" data-value="1 bis 2 Jahre" onclick="selectOption(this,'erfahrung')">
+                        <span class="text-2xl">🔨</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">1 bis 2 Jahre</p>
+                            <p class="text-sm text-gray-400">Berufseinsteiger</p>
+                        </div>
+                    </button>
+                    <button class="option-card" data-value="3 bis 5 Jahre" onclick="selectOption(this,'erfahrung')">
+                        <span class="text-2xl">🏠</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">3 bis 5 Jahre</p>
+                            <p class="text-sm text-gray-400">Erfahrene Fachkraft</p>
+                        </div>
+                    </button>
+                    <button class="option-card" data-value="Mehr als 5 Jahre" onclick="selectOption(this,'erfahrung')">
+                        <span class="text-2xl">⭐</span>
+                        <div>
+                            <p class="font-bold text-gray-900 opt-title">Mehr als 5 Jahre</p>
+                            <p class="text-sm text-gray-400">Profi mit viel Erfahrung</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCHRITT 5: Eintrittstermin + Führerschein -->
+            <div class="step" data-step="5">
+                <h2 class="text-2xl font-black text-gray-900 mb-1">Wann kannst du anfangen?</h2>
+                <p class="text-gray-400 text-sm mb-6">Und noch zwei kurze Fragen dazu.</p>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Frühester Eintrittstermin</label>
+                        <input type="date" id="eintrittstermin" class="form-input">
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-3">Führerschein vorhanden?</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="radio-card">
+                                <input type="radio" name="fuehrerschein" id="fs_ja" value="ja">
+                                <label for="fs_ja">✅ Ja</label>
+                            </div>
+                            <div class="radio-card">
+                                <input type="radio" name="fuehrerschein" id="fs_nein" value="nein">
+                                <label for="fs_nein">❌ Nein</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-3">Eigenes Fahrzeug?</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="radio-card">
+                                <input type="radio" name="eigenes_fahrzeug" id="fz_ja" value="ja">
+                                <label for="fz_ja">🚗 Ja</label>
+                            </div>
+                            <div class="radio-card">
+                                <input type="radio" name="eigenes_fahrzeug" id="fz_nein" value="nein">
+                                <label for="fz_nein">❌ Nein</label>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Eigenes Fahrzeug -->
+            <!-- SCHRITT 6: Nachricht -->
+            <div class="step" data-step="6">
+                <h2 class="text-2xl font-black text-gray-900 mb-1">Fast fertig!</h2>
+                <p class="text-gray-400 text-sm mb-6">
+                    Möchtest du noch etwas hinzufügen? Das ist optional.
+                </p>
                 <div class="mb-6">
-                    <p class="text-sm font-semibold text-gray-700 mb-3">Eigenes Fahrzeug? *</p>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="radio-card">
-                            <input type="radio" name="eigenes_fahrzeug" id="fz_ja" value="ja" required>
-                            <label for="fz_ja">🚗 Ja</label>
-                        </div>
-                        <div class="radio-card">
-                            <input type="radio" name="eigenes_fahrzeug" id="fz_nein" value="nein">
-                            <label for="fz_nein">❌ Nein</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Nachricht -->
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Kurze Nachricht
-                        <span class="font-normal text-gray-400">(optional)</span>
-                    </label>
-                    <textarea name="nachricht" rows="3" class="form-input resize-none"
+                    <textarea id="nachricht" rows="4" class="form-input resize-none"
                         placeholder="Erzähl uns kurz etwas über dich oder deine Erfahrungen..."></textarea>
                 </div>
-
-                <!-- Fehlermeldung -->
                 <div id="errorMsg"
                      class="hidden mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
-                    Es ist ein Fehler aufgetreten. Bitte versuche es erneut.
+                    Fehler beim Senden. Bitte versuche es erneut.
                 </div>
-
-                <!-- Absenden -->
-                <button type="submit" id="submitBtn" class="btn-red">
-                    Bewerbung absenden &rarr;
+                <button type="button" id="submitBtn" class="btn-red">
+                    Bewerbung absenden →
                 </button>
-
                 <p class="text-xs text-gray-400 text-center mt-4">
-                    🔒 Deine Daten werden vertraulich behandelt und nicht weitergegeben.
+                    🔒 Deine Daten werden vertraulich behandelt.
                 </p>
-            </form>
+            </div>
 
             <!-- Erfolg -->
             <div id="successMsg" class="hidden text-center py-10 fade-in">
                 <div class="text-6xl mb-5">🎉</div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Bewerbung eingegangen!</h3>
                 <p class="text-gray-500 leading-relaxed">
-                    Vielen Dank für deine Bewerbung!<br>
+                    Vielen Dank!<br>
                     Wir melden uns <strong>innerhalb von 24 Stunden</strong> bei dir.
                 </p>
-                <div class="mt-8 p-4 bg-gray-50 rounded-xl text-sm text-gray-500">
-                    In der Zwischenzeit: Folge uns auf Instagram für News und Einblicke ins Team!
-                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div id="navButtons" class="flex gap-3 mt-6">
+                <button id="backBtn" class="btn-back hidden" onclick="prevStep()">← Zurück</button>
+                <button id="nextBtn" class="btn-red" onclick="nextStep()">Weiter →</button>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ── FOOTER ─────────────────────────────────── -->
+<!-- FOOTER -->
 <footer class="bg-black py-8 px-5 text-center">
     <p class="font-black text-white text-lg mb-1">
         NEUFELD <span class="text-red-500">DACHBAU</span>
     </p>
-    <p class="text-gray-600 text-sm">© 2026 Neufeld Dachbau · Alle Rechte vorbehalten</p>
+    <p class="text-gray-600 text-sm">© 2026 Neufeld Dachbau. Alle Rechte vorbehalten.</p>
 </footer>
 
 <script>
-// ════════════════════════════════════════════════════
-//  SUPABASE ZUGANGSDATEN — HIER ANPASSEN
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════
 const SUPABASE_URL      = 'https://jykuvqucvzawuvmfzxzz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5a3V2cXVjdnphd3V2bWZ6eHp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTQ5ODcsImV4cCI6MjA5NTM5MDk4N30.X7DVe2uCCPkJ6NSpvVDetbqyJzCsiY1ELooFCdWTht4';
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════
 
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-document.getElementById('bewerbungsFormular').addEventListener('submit', async (e) => {
-    e.preventDefault();
+let currentStep     = 1;
+const totalSteps    = 6;
+let bewerbungId     = null;
+let selectedDeutsch   = null;
+let selectedErfahrung = null;
 
-    const btn      = document.getElementById('submitBtn');
-    const errorDiv = document.getElementById('errorMsg');
+function updateProgress(step) {
+    const pct = Math.round((step / totalSteps) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('stepDisplay').textContent  = step;
+    document.getElementById('stepPercent').textContent  = pct + '%';
+}
 
+function selectOption(btn, type) {
+    const group = btn.closest('.space-y-3');
+    group.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    btn.classList.add('selected');
+    if (type === 'deutsch')   selectedDeutsch   = btn.dataset.value;
+    if (type === 'erfahrung') selectedErfahrung = btn.dataset.value;
+}
+
+function showStep(n) {
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('active');
+    updateProgress(n);
+    document.getElementById('backBtn').classList.toggle('hidden', n === 1);
+    document.getElementById('nextBtn').classList.toggle('hidden', n === 6);
+}
+
+function validateStep(step) {
+    if (step === 1) {
+        if (!document.getElementById('vorname').value.trim() ||
+            !document.getElementById('nachname').value.trim()) {
+            alert('Bitte Vor und Nachname eingeben.');
+            return false;
+        }
+    }
+    if (step === 2) {
+        const e = document.getElementById('email').value.trim();
+        const t = document.getElementById('telefon').value.trim();
+        if (!e || !t) { alert('Bitte E-Mail und Telefonnummer eingeben.'); return false; }
+        if (!e.includes('@')) { alert('Bitte eine gültige E-Mail-Adresse eingeben.'); return false; }
+    }
+    if (step === 3 && !selectedDeutsch) {
+        alert('Bitte dein Deutschniveau auswählen.'); return false;
+    }
+    if (step === 4 && !selectedErfahrung) {
+        alert('Bitte deine Erfahrung auswählen.'); return false;
+    }
+    if (step === 5) {
+        if (!document.getElementById('eintrittstermin').value) {
+            alert('Bitte deinen frühesten Eintrittstermin angeben.'); return false;
+        }
+        if (!document.querySelector('input[name="fuehrerschein"]:checked')) {
+            alert('Bitte angeben ob du einen Führerschein hast.'); return false;
+        }
+        if (!document.querySelector('input[name="eigenes_fahrzeug"]:checked')) {
+            alert('Bitte angeben ob du ein eigenes Fahrzeug hast.'); return false;
+        }
+    }
+    return true;
+}
+
+function collectData(upToStep) {
+    const d = {};
+    if (upToStep >= 1) {
+        d.vorname  = document.getElementById('vorname').value.trim();
+        d.nachname = document.getElementById('nachname').value.trim();
+    }
+    if (upToStep >= 2) {
+        d.email   = document.getElementById('email').value.trim().toLowerCase();
+        d.telefon = document.getElementById('telefon').value.trim();
+    }
+    if (upToStep >= 3) d.deutschkenntnisse = selectedDeutsch;
+    if (upToStep >= 4) d.erfahrung         = selectedErfahrung;
+    if (upToStep >= 5) {
+        d.eintrittstermin  = document.getElementById('eintrittstermin').value;
+        d.fuehrerschein    = document.querySelector('input[name="fuehrerschein"]:checked').value === 'ja';
+        d.eigenes_fahrzeug = document.querySelector('input[name="eigenes_fahrzeug"]:checked').value === 'ja';
+    }
+    if (upToStep >= 6) {
+        d.nachricht = document.getElementById('nachricht').value.trim() || null;
+    }
+    return d;
+}
+
+async function saveProgress(step, abgeschlossen = false) {
+    const data = { ...collectData(step), letzter_schritt: step, abgeschlossen };
+
+    if (!bewerbungId) {
+        const { data: result, error } = await db
+            .from('bewerbungen')
+            .insert([data])
+            .select('id')
+            .single();
+        if (error) { console.error(error); return false; }
+        bewerbungId = result.id;
+    } else {
+        const { error } = await db
+            .from('bewerbungen')
+            .update(data)
+            .eq('id', bewerbungId);
+        if (error) { console.error(error); return false; }
+    }
+    return true;
+}
+
+async function nextStep() {
+    if (!validateStep(currentStep)) return;
+
+    if (currentStep === 2) {
+        const ok = await saveProgress(2);
+        if (!ok) { alert('Verbindungsfehler. Bitte versuche es erneut.'); return; }
+    } else if (currentStep >= 3 && bewerbungId) {
+        await saveProgress(currentStep);
+    }
+
+    currentStep++;
+    showStep(currentStep);
+    window.scrollTo({ top: document.getElementById('bewerben').offsetTop - 80, behavior: 'smooth' });
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+    }
+}
+
+document.getElementById('submitBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('submitBtn');
     btn.disabled    = true;
     btn.textContent = 'Wird gesendet…';
-    errorDiv.classList.add('hidden');
+    document.getElementById('errorMsg').classList.add('hidden');
 
-    const form = e.target;
-
-    const fuehrerscheinVal   = form.querySelector('input[name="fuehrerschein"]:checked');
-    const eigenesfahrzeugVal = form.querySelector('input[name="eigenes_fahrzeug"]:checked');
-
-    if (!fuehrerscheinVal || !eigenesfahrzeugVal) {
-        errorDiv.textContent = 'Bitte alle Pflichtfelder ausfüllen.';
-        errorDiv.classList.remove('hidden');
+    const ok = await saveProgress(6, true);
+    if (!ok) {
+        document.getElementById('errorMsg').classList.remove('hidden');
         btn.disabled    = false;
         btn.textContent = 'Bewerbung absenden →';
         return;
     }
 
-    const data = {
-        vorname:          form.vorname.value.trim(),
-        nachname:         form.nachname.value.trim(),
-        email:            form.email.value.trim().toLowerCase(),
-        telefon:          form.telefon.value.trim(),
-        deutschkenntnisse: form.deutschkenntnisse.value,
-        erfahrung:        form.erfahrung.value,
-        eintrittstermin:  form.eintrittstermin.value,
-        fuehrerschein:    fuehrerscheinVal.value === 'ja',
-        eigenes_fahrzeug: eigenesfahrzeugVal.value === 'ja',
-        nachricht:        form.nachricht.value.trim() || null,
-    };
-
-    const { error } = await db.from('bewerbungen').insert([data]);
-
-    if (error) {
-        console.error(error);
-        errorDiv.textContent = 'Fehler beim Senden. Bitte versuche es erneut.';
-        errorDiv.classList.remove('hidden');
-        btn.disabled    = false;
-        btn.textContent = 'Bewerbung absenden →';
-    } else {
-        form.classList.add('hidden');
-        document.getElementById('successMsg').classList.remove('hidden');
-        document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    document.querySelector('.step[data-step="6"]').classList.remove('active');
+    document.getElementById('navButtons').classList.add('hidden');
+    document.getElementById('successMsg').classList.remove('hidden');
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('stepPercent').textContent  = '100%';
+    document.getElementById('stepDisplay').textContent  = '✓';
 });
+
+showStep(1);
 </script>
 </body>
 </html>
