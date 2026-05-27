@@ -60,6 +60,21 @@
         .option-card:hover { border-color: #fca5a5; background: #fff9f9; }
         .option-card.selected { border-color: #dc2626; background: #fff1f1; }
         .option-card.selected .opt-title { color: #dc2626; }
+        .option-card.selected .opt-icon { background: #fee2e2; color: #dc2626; }
+
+        .opt-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            flex-shrink: 0;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            transition: all 0.15s;
+        }
+        .opt-icon svg { width: 1.1rem; height: 1.1rem; }
 
         .radio-card { position: relative; }
         .radio-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -147,6 +162,19 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
 
+        .benefit-icon {
+            width: 3rem;
+            height: 3rem;
+            flex-shrink: 0;
+            background: #fee2e2;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc2626;
+        }
+        .benefit-icon svg { width: 1.4rem; height: 1.4rem; }
+
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -159,9 +187,8 @@
 <!-- HEADER -->
 <header class="bg-black py-3 px-5 sticky top-0 z-50 shadow-xl">
     <div class="max-w-4xl mx-auto flex items-center justify-between">
-        <div class="flex items-center">
-            <span class="text-white font-black text-xl tracking-tight">NEUFELD</span>
-            <span class="text-red-500 font-black text-xl tracking-tight ml-1">DACHBAU</span>
+        <div class="bg-white rounded-lg px-3 py-1.5">
+            <img src="logo.png" alt="Neufeld Dachbau" class="h-8 w-auto">
         </div>
         <a href="#bewerben"
            class="bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition">
@@ -207,7 +234,13 @@
 
         <div class="grid sm:grid-cols-2 gap-5">
             <div class="benefit-card">
-                <div class="text-3xl flex-shrink-0">💰</div>
+                <div class="benefit-icon">
+                    <!-- Euro / Bezahlung -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-1">Faire Bezahlung</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
@@ -216,7 +249,15 @@
                 </div>
             </div>
             <div class="benefit-card">
-                <div class="text-3xl flex-shrink-0">🤝</div>
+                <div class="benefit-icon">
+                    <!-- Team / Personen -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-1">Familiäres Team</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
@@ -225,7 +266,12 @@
                 </div>
             </div>
             <div class="benefit-card">
-                <div class="text-3xl flex-shrink-0">🛠️</div>
+                <div class="benefit-icon">
+                    <!-- Werkzeug -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                </div>
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-1">Modernes Equipment</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
@@ -234,7 +280,12 @@
                 </div>
             </div>
             <div class="benefit-card">
-                <div class="text-3xl flex-shrink-0">📋</div>
+                <div class="benefit-icon">
+                    <!-- Schild / Sicherheit -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
                 <div>
                     <h3 class="font-bold text-gray-900 text-lg mb-1">Unbefristeter Vertrag</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
@@ -303,28 +354,47 @@
                 <p class="text-gray-400 text-sm mb-6">Wähle dein Sprachniveau aus.</p>
                 <div class="space-y-3">
                     <button class="option-card" data-value="Grundkenntnisse (A1 bis A2)" onclick="selectOption(this,'deutsch')">
-                        <span class="text-2xl">🗣️</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="4" height="18" rx="1"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">Grundkenntnisse</p>
                             <p class="text-sm text-gray-400">A1 bis A2</p>
                         </div>
                     </button>
                     <button class="option-card" data-value="Gut (B1 bis B2)" onclick="selectOption(this,'deutsch')">
-                        <span class="text-2xl">💬</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="4" height="18" rx="1"/>
+                                <rect x="10" y="9" width="4" height="12" rx="1"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">Gut</p>
                             <p class="text-sm text-gray-400">B1 bis B2</p>
                         </div>
                     </button>
                     <button class="option-card" data-value="Fließend (C1)" onclick="selectOption(this,'deutsch')">
-                        <span class="text-2xl">✅</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="4" height="18" rx="1"/>
+                                <rect x="10" y="9" width="4" height="12" rx="1"/>
+                                <rect x="17" y="5" width="4" height="16" rx="1"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">Fließend</p>
                             <p class="text-sm text-gray-400">C1</p>
                         </div>
                     </button>
                     <button class="option-card" data-value="Muttersprache (C2)" onclick="selectOption(this,'deutsch')">
-                        <span class="text-2xl">🇩🇪</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">Muttersprache</p>
                             <p class="text-sm text-gray-400">C2</p>
@@ -339,28 +409,47 @@
                 <p class="text-gray-400 text-sm mb-6">Als Dachdecker oder in einem ähnlichen Beruf.</p>
                 <div class="space-y-3">
                     <button class="option-card" data-value="Keine Erfahrung" onclick="selectOption(this,'erfahrung')">
-                        <span class="text-2xl">🌱</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">Keine Erfahrung</p>
                             <p class="text-sm text-gray-400">Quereinsteiger willkommen</p>
                         </div>
                     </button>
                     <button class="option-card" data-value="1 bis 2 Jahre" onclick="selectOption(this,'erfahrung')">
-                        <span class="text-2xl">🔨</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">1 bis 2 Jahre</p>
                             <p class="text-sm text-gray-400">Berufseinsteiger</p>
                         </div>
                     </button>
                     <button class="option-card" data-value="3 bis 5 Jahre" onclick="selectOption(this,'erfahrung')">
-                        <span class="text-2xl">🏠</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">3 bis 5 Jahre</p>
                             <p class="text-sm text-gray-400">Erfahrene Fachkraft</p>
                         </div>
                     </button>
                     <button class="option-card" data-value="Mehr als 5 Jahre" onclick="selectOption(this,'erfahrung')">
-                        <span class="text-2xl">⭐</span>
+                        <div class="opt-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </div>
                         <div>
                             <p class="font-bold text-gray-900 opt-title">Mehr als 5 Jahre</p>
                             <p class="text-sm text-gray-400">Profi mit viel Erfahrung</p>
@@ -383,11 +472,11 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div class="radio-card">
                                 <input type="radio" name="fuehrerschein" id="fs_ja" value="ja">
-                                <label for="fs_ja">✅ Ja</label>
+                                <label for="fs_ja">Ja</label>
                             </div>
                             <div class="radio-card">
                                 <input type="radio" name="fuehrerschein" id="fs_nein" value="nein">
-                                <label for="fs_nein">❌ Nein</label>
+                                <label for="fs_nein">Nein</label>
                             </div>
                         </div>
                     </div>
@@ -396,11 +485,11 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div class="radio-card">
                                 <input type="radio" name="eigenes_fahrzeug" id="fz_ja" value="ja">
-                                <label for="fz_ja">🚗 Ja</label>
+                                <label for="fz_ja">Ja</label>
                             </div>
                             <div class="radio-card">
                                 <input type="radio" name="eigenes_fahrzeug" id="fz_nein" value="nein">
-                                <label for="fz_nein">❌ Nein</label>
+                                <label for="fz_nein">Nein</label>
                             </div>
                         </div>
                     </div>
@@ -424,14 +513,22 @@
                 <button type="button" id="submitBtn" class="btn-red">
                     Bewerbung absenden →
                 </button>
-                <p class="text-xs text-gray-400 text-center mt-4">
-                    🔒 Deine Daten werden vertraulich behandelt.
+                <p class="text-xs text-gray-400 text-center mt-4 flex items-center justify-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    Deine Daten werden vertraulich behandelt.
                 </p>
             </div>
 
             <!-- Erfolg -->
             <div id="successMsg" class="hidden text-center py-10 fade-in">
-                <div class="text-6xl mb-5">🎉</div>
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-10 h-10 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                </div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Bewerbung eingegangen!</h3>
                 <p class="text-gray-500 leading-relaxed">
                     Vielen Dank!<br>
@@ -450,9 +547,11 @@
 
 <!-- FOOTER -->
 <footer class="bg-black py-8 px-5 text-center">
-    <p class="font-black text-white text-lg mb-1">
-        NEUFELD <span class="text-red-500">DACHBAU</span>
-    </p>
+    <div class="flex justify-center mb-3">
+        <div class="bg-white rounded-lg px-4 py-2">
+            <img src="logo.png" alt="Neufeld Dachbau" class="h-8 w-auto">
+        </div>
+    </div>
     <p class="text-gray-600 text-sm">© 2026 Neufeld Dachbau. Alle Rechte vorbehalten.</p>
 </footer>
 
