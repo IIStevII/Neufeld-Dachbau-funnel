@@ -12,7 +12,7 @@
         body { font-family: 'Inter', sans-serif; }
 
         .hero-bg {
-            background: #0d0d0d;
+            background: linear-gradient(160deg, #1a0505 0%, #111827 45%, #0f172a 100%);
             position: relative;
             overflow: hidden;
         }
@@ -39,8 +39,8 @@
             color: #111;
         }
         .form-input:focus {
-            border-color: #dc2626;
-            box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
+            border-color: #b91c1c;
+            box-shadow: 0 0 0 3px rgba(185,28,28,0.12);
         }
 
         .option-card {
@@ -58,9 +58,9 @@
             transition: all 0.15s;
         }
         .option-card:hover { border-color: #fca5a5; background: #fff9f9; }
-        .option-card.selected { border-color: #dc2626; background: #fff1f1; }
-        .option-card.selected .opt-title { color: #dc2626; }
-        .option-card.selected .opt-icon { background: #fee2e2; color: #dc2626; }
+        .option-card.selected { border-color: #b91c1c; background: #fff1f1; }
+        .option-card.selected .opt-title { color: #b91c1c; }
+        .option-card.selected .opt-icon { background: #fee2e2; color: #b91c1c; }
 
         .opt-icon {
             width: 2.5rem;
@@ -92,9 +92,9 @@
         }
         .radio-card label:hover { border-color: #fca5a5; }
         .radio-card input[type="radio"]:checked + label {
-            border-color: #dc2626;
+            border-color: #b91c1c;
             background: #fff1f1;
-            color: #dc2626;
+            color: #b91c1c;
         }
 
         .progress-bg {
@@ -105,13 +105,13 @@
         }
         .progress-fill {
             height: 100%;
-            background: #dc2626;
+            background: #b91c1c;
             border-radius: 999px;
             transition: width 0.4s ease;
         }
 
         .btn-red {
-            background: #dc2626;
+            background: #b91c1c;
             color: white;
             padding: 1rem 2rem;
             border-radius: 0.75rem;
@@ -123,7 +123,7 @@
             transition: background 0.15s;
             width: 100%;
         }
-        .btn-red:hover { background: #b91c1c; }
+        .btn-red:hover { background: #991b1b; }
         .btn-red:disabled { background: #9ca3af; cursor: not-allowed; }
 
         .btn-back {
@@ -171,7 +171,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #dc2626;
+            color: #b91c1c;
         }
         .benefit-icon svg { width: 1.4rem; height: 1.4rem; }
 
@@ -185,21 +185,29 @@
 <body class="bg-gray-50">
 
 <!-- HEADER -->
-<header class="bg-black py-3 px-5 sticky top-0 z-50 shadow-xl">
+<header style="background:#111827;" class="py-3 px-5 sticky top-0 z-50 shadow-xl">
     <div class="max-w-4xl mx-auto flex items-center justify-between">
-        <div class="bg-white rounded-lg px-3 py-1.5">
-            <img src="logo.png" alt="Neufeld Dachbau" class="h-8 w-auto">
+        <div class="bg-white rounded-lg px-3 py-2">
+            <img src="logo.png" alt="Neufeld Dachbau" class="h-10 w-auto">
         </div>
         <a href="#bewerben"
-           class="bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition">
+           class="bg-red-700 hover:bg-red-800 text-white text-sm font-bold px-4 py-2 rounded-lg transition">
             Jetzt bewerben
         </a>
     </div>
 </header>
 
 <!-- HERO -->
-<section class="hero-bg text-white py-24 px-5 pb-32">
+<section class="hero-bg text-white py-16 px-5 pb-32">
     <div class="max-w-3xl mx-auto text-center relative z-10 fade-in">
+
+        <!-- Großes Logo -->
+        <div class="flex justify-center mb-10">
+            <div class="bg-white rounded-2xl px-10 py-6 shadow-2xl">
+                <img src="logo.png" alt="Neufeld Dachbau" class="h-24 sm:h-32 w-auto">
+            </div>
+        </div>
+
         <div class="inline-flex items-center gap-2 bg-red-600/20 border border-red-600/40
                     text-red-400 text-sm font-semibold px-4 py-1.5 rounded-full mb-7">
             <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
@@ -208,7 +216,7 @@
 
         <h1 class="text-4xl sm:text-6xl font-black leading-tight mb-6">
             Werde Teil des<br>
-            <span class="text-red-500">Neufeld Dachbau</span><br>
+            <span class="text-red-400">Neufeld Dachbau</span><br>
             Teams!
         </h1>
 
@@ -218,11 +226,11 @@
         </p>
 
         <a href="#bewerben"
-           class="inline-block bg-red-600 hover:bg-red-700 text-white font-black text-lg
+           class="inline-block bg-red-700 hover:bg-red-800 text-white font-black text-lg
                   px-10 py-4 rounded-2xl transition transform hover:scale-105 shadow-lg shadow-red-900/40">
             Kostenlos bewerben →
         </a>
-        <p class="text-gray-600 text-sm mt-4">Nur 2 Minuten. Direkt auf dem Handy.</p>
+        <p class="text-gray-500 text-sm mt-4">Nur 2 Minuten. Direkt auf dem Handy.</p>
     </div>
 </section>
 
@@ -557,13 +565,13 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="bg-black py-8 px-5 text-center">
+<footer style="background:#111827;" class="py-8 px-5 text-center">
     <div class="flex justify-center mb-3">
         <div class="bg-white rounded-lg px-4 py-2">
-            <img src="logo.png" alt="Neufeld Dachbau" class="h-8 w-auto">
+            <img src="logo.png" alt="Neufeld Dachbau" class="h-10 w-auto">
         </div>
     </div>
-    <p class="text-gray-600 text-sm">© 2026 Neufeld Dachbau. Alle Rechte vorbehalten.</p>
+    <p class="text-gray-500 text-sm">© 2026 Neufeld Dachbau. Alle Rechte vorbehalten.</p>
 </footer>
 
 <script>
